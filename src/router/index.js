@@ -3,6 +3,10 @@ import Router from 'vue-router'
 import GoodsList from './../views/GoodsList'
 import Cart from './../views/Cart'
 import Address from './../views/Address'
+import OrderConfirm from './../views/OrderConfirm'
+import OrderSuccess from './../views/OrderSuccess'
+import OrderList from './../views/OrderList'
+import FeedBackList from './../views/FeedBackList'
 
 Vue.use(Router)
 
@@ -19,9 +23,29 @@ export default new Router({
       component: Cart
     },
     {
+      path: '/OrderList',
+      name: 'OrderList',
+      component: OrderList
+    },
+    {
+      path: '/FeedBackList',
+      name: 'FeedBackList',
+      component: FeedBackList
+    },
+    {
       path: '/address',
       name: 'Address',
       component: Address
+    },
+    {
+      path: '/orderConfirm',
+      name: 'OrderConfirm',
+      component: OrderConfirm
+    },
+    {
+      path: '/orderSuccess',
+      name: 'OrderSuccess',
+      component: OrderSuccess
     }
   ]
 })

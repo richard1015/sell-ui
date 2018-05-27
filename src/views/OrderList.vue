@@ -2,7 +2,7 @@
   <div>
     <nav-header></nav-header>
     <nav-bread>
-      <span slot="bread">我的购物车</span>
+      <span slot="bread">订单列表</span>
     </nav-bread>
     <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1"
          xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -45,7 +45,7 @@
     <div class="container">
       <div class="cart">
         <div class="page-title-normal">
-          <h2 class="page-title-h2"><span>我的购物车</span></h2>
+          <h2 class="page-title-h2"><span>我的订单</span></h2>
         </div>
         <div class="item-list-wrap">
           <div class="cart-item">
@@ -185,7 +185,7 @@
     },
     methods: {
       init() {
-        this.$axios.get("/buyer/cart/list").then((result) => {
+        this.$axios.get("/buyer/order/list").then((result) => {
           let res = result.data;
           if (res.code == "0") {
             this.cartList = res.data;
