@@ -122,6 +122,7 @@
                                                                                  name="loginname"
                                                                                  v-model="nickName"
                                                                                  placeholder="User Name"
+                                                                                 disabled
                                                                                  data-type="loginname"
                                                                                  class="regi_login_input regi_login_input_left">
               </li>
@@ -178,22 +179,22 @@ export default {
       });
     },
     modify() {
-      if (!this.userName || !this.userPwd) {
+      if (!this.nickName || !this.newPwd) {
         this.errorTip = true;
         return;
       }
       this.$axios
-        .post("/buyer/modify", {
-          userName: this.userName,
-          userPwd: this.userPwd
+        .post("/buyer/register", {
+          username: this.nickName,
+          password: this.newPwd
         })
         .then(response => {
           let res = response.data;
           if (res.code == "0") {
             this.errorTip = false;
             this.modifyModalFlag = false;
+            alert("修改成功！")
             this.$store.commit("updateUserInfo", res.data.userName);
-            this.getCartCount();
           } else {
             this.errorTip = true;
           }
@@ -206,16 +207,15 @@ export default {
       }
       this.$axios
         .post("/buyer/register", {
-          userName: this.userName,
-          userPwd: this.userPwd
+          username: this.userName,
+          password: this.userPwd
         })
         .then(response => {
           let res = response.data;
           if (res.code == "0") {
             this.errorTip = false;
             this.registerModalFlag = false;
-            this.$store.commit("updateUserInfo", res.data.userName);
-            this.getCartCount();
+            alert("注册成功");
           } else {
             this.errorTip = true;
           }

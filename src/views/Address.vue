@@ -92,7 +92,7 @@
                   </div>
                   <div class="addr-opration addr-default" v-if="item.isDefault">Default address</div>
                 </li>
-                <li class="addr-new">
+                <li class="addr-new" @click="addAddress">
                   <div class="add-new-inner">
                     <i class="icon-add">
                       <svg class="icon icon-add">
@@ -153,103 +153,144 @@
 </template>
 
 <script>
-  import NavHeader from './../components/NavHeader'
-  import NavFooter from './../components/NavFooter'
-  import NavBread from './../components/NavBread'
-  import Modal from './../components/Modal'
+import NavHeader from "./../components/NavHeader";
+import NavFooter from "./../components/NavFooter";
+import NavBread from "./../components/NavBread";
+import Modal from "./../components/Modal";
 
-  export default {
-    data() {
-      return {
-        addModalFlag: false,
-        limit: 3,
-        checkIndex: 0,
-        selectedAddressId: '',
-        isMdShow: false,
-        addressId: '',
-        addressList: []
-      }
-    },
-    components: {
-      NavHeader,
-      NavFooter,
-      NavBread,
-      Modal
-    },
-    mounted() {
-      this.init();
-    },
-    computed: {
-      addressListFilter() {
-        return this.addressList.slice(0, this.limit);
-      }
-    },
-    methods: {
-      init() {
-        this.$axios.get("/buyer/address/list").then((result) => {
-          let res = result.data;
-          if (res.code == "0") {
-            this.addressList = res.data;
-            this.addressList.forEach((item) => {
-              if (item.isDefault) {
-                this.selectedAddressId = item.id
-              }
-            })
-          } else {
-            this.addressList = [];
-          }
-        }).catch(function (error) {
-          console.log("error init." + error)
-        });
-      },
-      expend() {
-        if (this.limit == 3) {
-          this.limit = this.addressList.length;
-        } else {
-          this.limit = 3;
+export default {
+  data() {
+    return {
+      addModalFlag: false,
+      limit: 3,
+      checkIndex: 0,
+      selectedAddressId: "",
+      isMdShow: false,
+      addressId: "",
+      addressList: []
+    };
+  },
+  components: {
+    NavHeader,
+    NavFooter,
+    NavBread,
+    Modal
+  },
+  mounted() {
+    this.init();
+  },
+  computed: {
+    addressListFilter() {
+      return this.addressList.slice(0, this.limit);
+    }
+  },
+  methods: {
+    getCookie(name) {
+      name = name + "=";
+      var start = document.cookie.indexOf(name),
+        value = null;
+      if (start > -1) {
+        var end = document.cookie.indexOf(";", start);
+        if (end == -1) {
+          end = document.cookie.length;
         }
-      },
-      setDefault(id) {
-        var param = {
-          addressId: id,
-        }
-        this.$axios.get("/buyer/address/set_default", {params: param}).then((result) => {
+        value = document.cookie.substring(start + name.length, end);
+      }
+      return value;
+    },
+    addAddress() {
+      this.$axios
+        .post("/buyer/address/add", {
+          buyerId: this.getCookie("userId"),
+          recName: "收件人",
+          streetName: "地址",
+          postCode: "10010",
+          tel: "15010156268",
+          isDefault: false
+        })
+        .then(result => {
           let res = result.data;
           if (res.code == "0") {
             this.init();
           } else {
-
+            this.addressList = [];
           }
-        }).catch(function (error) {
-          console.log("error init." + error)
+        })
+        .catch(function(error) {
+          console.log("error init." + error);
         });
-      },
-      closeModal() {
-        this.isMdShow = false;
-      },
-      delAddressConfirm(addressId) {
-        this.isMdShow = true;
-        this.addressId = addressId;
-      },
-      delAddress() {
-        var param = {
-          addressId: this.addressId,
-        }
-        this.$axios.get("/buyer/address/del", {params: param}).then((result) => {
+    },
+    init() {
+      this.$axios
+        .get("/buyer/address/list")
+        .then(result => {
+          let res = result.data;
+          if (res.code == "0") {
+            this.addressList = res.data;
+            this.addressList.forEach(item => {
+              if (item.isDefault) {
+                this.selectedAddressId = item.id;
+              }
+            });
+          } else {
+            this.addressList = [];
+          }
+        })
+        .catch(function(error) {
+          console.log("error init." + error);
+        });
+    },
+    expend() {
+      if (this.limit == 3) {
+        this.limit = this.addressList.length;
+      } else {
+        this.limit = 3;
+      }
+    },
+    setDefault(id) {
+      var param = {
+        addressId: id
+      };
+      this.$axios
+        .get("/buyer/address/set_default", { params: param })
+        .then(result => {
+          let res = result.data;
+          if (res.code == "0") {
+            this.init();
+          } else {
+          }
+        })
+        .catch(function(error) {
+          console.log("error init." + error);
+        });
+    },
+    closeModal() {
+      this.isMdShow = false;
+    },
+    delAddressConfirm(addressId) {
+      this.isMdShow = true;
+      this.addressId = addressId;
+    },
+    delAddress() {
+      var param = {
+        addressId: this.addressId
+      };
+      this.$axios
+        .get("/buyer/address/del", { params: param })
+        .then(result => {
           let res = result.data;
           if (res.code == "0") {
             this.isMdShow = false;
             this.init();
           } else {
-
           }
-        }).catch(function (error) {
-          console.log("error init." + error)
+        })
+        .catch(function(error) {
+          console.log("error init." + error);
         });
-      }
-
     }
   }
+};
 </script>
 
 <style>
