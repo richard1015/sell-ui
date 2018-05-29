@@ -1,5 +1,45 @@
 <template>
   <div>
+      <!-- 新增地址 -->
+        <div class="md-modal modal-msg md-modal-transition" v-bind:class="{'md-show':modalFlag}">
+            <div class="md-modal-inner">
+                <div class="md-top">
+                    <div class="md-title">添加新地址</div>
+                    <button class="md-close" @click="modalFlag=false">关闭</button>
+                </div>
+                <div class="md-content">
+                    <div class="confirm-tips">
+                        <div class="error-wrap">
+                            <span class="error error-show" v-show="errorTip">添加失败</span>
+                        </div>
+                        <ul>
+                            <li class="regi_form_input">
+                                <!-- <i class="icon IconPeople"></i> -->
+                                <input type="text" tabindex="1" name="loginname" v-model="recName" placeholder="收件人" data-type="loginname" class="regi_login_input regi_login_input_left">
+                            </li>
+                            <li class="regi_form_input noMargin">
+                                <!-- <i class="icon IconPwd"></i> -->
+                                <input type="text" tabindex="2" name="password" v-model="streetName" placeholder="地址" class="regi_login_input regi_login_input_left login-input-no input_text">
+                            </li>
+                             <li class="regi_form_input noMargin">
+                                <!-- <i class="icon IconPwd"></i> -->
+                                <input type="text" tabindex="2" name="password" v-model="postCode" placeholder="邮编" class="regi_login_input regi_login_input_left login-input-no input_text">
+                            </li>
+                             <li class="regi_form_input noMargin">
+                                <!-- <i class="icon IconPwd"></i> -->
+                                <input type="text" tabindex="2" name="password" v-model="tel" placeholder="电话" class="regi_login_input regi_login_input_left login-input-no input_text">
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="login-wrap">
+                        <a href="javascript:;" class="btn-login" @click="addAddress">添加</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="md-overlay" v-if="modalFlag" @click="modalFlag=false;"></div>
+
     <nav-header></nav-header>
     <nav-bread>
       <span slot="bread">地址</span>
@@ -92,7 +132,7 @@
                   </div>
                   <div class="addr-opration addr-default" v-if="item.isDefault">Default address</div>
                 </li>
-                <li class="addr-new" @click="addAddress">
+                <li class="addr-new" @click="modalFlag=true;">
                   <div class="add-new-inner">
                     <i class="icon-add">
                       <svg class="icon icon-add">
@@ -105,7 +145,7 @@
               </ul>
             </div>
 
-            <div class="shipping-addr-more">
+            <!-- <div class="shipping-addr-more">
               <a class="addr-more-btn up-down-btn" href="javascript:;" @click="expend" v-bind:class="{'open':limit>3}">
                 更多
                 <i class="i-up-down">
@@ -113,7 +153,7 @@
                   <i class="i-up-down-r"></i>
                 </i>
               </a>
-            </div>
+            </div> -->
           </div>
 
           <!-- shipping method-->
@@ -161,13 +201,17 @@ import Modal from "./../components/Modal";
 export default {
   data() {
     return {
-      addModalFlag: false,
+      modalFlag: false,
       limit: 3,
       checkIndex: 0,
       selectedAddressId: "",
       isMdShow: false,
       addressId: "",
-      addressList: []
+      addressList: [],
+      recName: "",
+      streetName: "",
+      postCode: "",
+      tel: ""
     };
   },
   components: {
@@ -199,18 +243,28 @@ export default {
       return value;
     },
     addAddress() {
+      var params = {
+        buyerId: this.getCookie("userId"),
+        recName: this.recName,
+        streetName: this.streetName,
+        postCode: this.postCode,
+        tel: this.tel,
+        isDefault: false
+      };
+      for (var key in params) {
+        if (params.hasOwnProperty(key)) {
+          if (!params[key]) {
+            return alert("请完善基本信息必填项");
+          }
+        }
+      }
       this.$axios
-        .post("/buyer/address/add", {
-          buyerId: this.getCookie("userId"),
-          recName: "收件人",
-          streetName: "地址",
-          postCode: "10010",
-          tel: "15010156268",
-          isDefault: false
-        })
+        .post("/buyer/address/add", params)
         .then(result => {
           let res = result.data;
           if (res.code == "0") {
+            alert("添加成功！");
+            this.modalFlag = false;
             this.init();
           } else {
             this.addressList = [];
