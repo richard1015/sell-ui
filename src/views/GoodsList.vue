@@ -41,7 +41,7 @@
               <ul>
                 <li v-for="item in goodsList">
                   <div class="pic">
-                    <a href="#"><img v-lazy="item.icon" alt=""></a>
+                    <a href="#" :title="item.description" @click="showGood(item)"><img v-lazy="item.icon" alt=""></a>
                   </div>
                   <div class="main">
                     <div class="name">{{item.name}}</div>
@@ -62,10 +62,19 @@
       </div>
     </div>
     <div class="md-overlay" v-show="overLayFlag" @click="closePop"></div>
-    <modal v-bind:mdShow="mdShow" v-on:close="closeModal">
+     <modal v-bind:mdShow="mdShow" v-on:close="closeModal">
       <p slot="message">请先登录，否则无法加入到购物车中！</p>
       <div slot="btnGroup">
         <a class="btn btn--m" href="javascript:;" @click="mdShow=false">关闭</a>
+      </div>
+    </modal>
+    <modal v-bind:mdShow="mdShowDesc" v-on:close="closeModal">
+      <h1>{{currentItem.name}}</h1>
+      <p slot="message">商品描述{{currentItem.description}}</p>
+      <p slot="message">商品价格:{{currentItem.price}}</p>
+      <p slot="message">商品图片：<img :src="currentItem.icon" style="width:200px;height:300px;" alt="" srcset=""></p>
+      <div slot="btnGroup">
+        <a class="btn btn--m" href="javascript:;" @click="mdShowDesc=false">关闭</a>
       </div>
     </modal>
     <modal v-bind:mdShow="mdShowCart" v-on:close="closeModal">
@@ -119,7 +128,9 @@ export default {
       size: 8,
       loading: false,
       mdShow: false,
-      mdShowCart: false
+      mdShowCart: false,
+      mdShowDesc: false,
+      currentItem: {}
     };
   },
   components: {
@@ -133,6 +144,11 @@ export default {
     this.getPriceFilterList();
   },
   methods: {
+    showGood(item) {
+      this.currentItem = item;
+      this.mdShowDesc = true;
+      console.log(item);
+    },
     getPriceFilterList() {
       this.$axios
         .get("/buyer/category/list")
@@ -199,6 +215,7 @@ export default {
     closePop() {
       this.filterBy = false;
       this.overLayFlag = false;
+      this.mdShowDesc = false;
     },
     loadMore() {
       this.busy = true;
@@ -234,6 +251,7 @@ export default {
     closeModal() {
       this.mdShow = false;
       this.mdShowCart = false;
+      this.mdShowDesc = false;
     }
   }
 };
