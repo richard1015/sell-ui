@@ -21,3 +21,5 @@ export function currency (value, currency, decimals) {
     _int.slice(i).replace(digitsRE, '$1,') +
     _float
 }
+
+

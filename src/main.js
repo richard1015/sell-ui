@@ -7,6 +7,7 @@ import Vuex from 'vuex'
 import VueLazyLoad from 'vue-lazyload'
 import infiniteScroll from 'vue-infinite-scroll'
 import {currency} from './util/currency'
+import {date} from './util/date'
 
 import './assets/css/app.css'
 // 引用axios，并设置基础URL为后端服务api地址
@@ -18,6 +19,7 @@ Vue.prototype.$axios = axios
 Vue.config.productionTip = false
 
 Vue.filter("currency", currency)
+Vue.filter("date", date)
 
 Vue.use(VueLazyLoad, {
   loading: "/static/loading-svg/loading-spokes.svg"

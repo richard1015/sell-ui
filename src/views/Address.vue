@@ -249,11 +249,11 @@ export default {
         streetName: this.streetName,
         postCode: this.postCode,
         tel: this.tel,
-        isDefault: false
+        isDefault: true
       };
       for (var key in params) {
         if (params.hasOwnProperty(key)) {
-          if (!params[key]) {
+          if (!params[key] && key != "isDefault") {
             return alert("请完善基本信息必填项");
           }
         }
