@@ -9,9 +9,6 @@
                 </div>
                 <div class="md-content">
                     <div class="confirm-tips">
-                        <div class="error-wrap">
-                            <span class="error error-show" v-show="errorTip">添加失败</span>
-                        </div>
                         <ul>
                             <li class="regi_form_input">
                                 <!-- <i class="icon IconPeople"></i> -->
@@ -282,9 +279,7 @@ export default {
           if (res.code == "0") {
             this.addressList = res.data;
             this.addressList.forEach(item => {
-              if (item.isDefault) {
                 this.selectedAddressId = item.id;
-              }
             });
           } else {
             this.addressList = [];

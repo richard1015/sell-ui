@@ -15,7 +15,7 @@ module.exports = {
         target: 'http://localhost:8105',
         changeOrigin: true,
         pathRewrite: {
-          '^/sell': '/sell'
+          '^/sell': '/'
         }
       }
     },
