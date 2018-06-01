@@ -52,6 +52,7 @@
             <table style="width:100%">
               <thead>
                 <td>订单id</td>
+                <td>订单状态</td>
                 <td>订单内容</td>
                 <td>收件人</td>
                 <td>联系方式</td>
@@ -63,6 +64,7 @@
               <tbody>
                 <tr v-for="item in cartList" :key="item.orderId">
                   <td>{{item.orderId}}</td>
+                  <td>{{item.orderStatus==0?"未完结":"已完结"}}</td>
                   <td><textarea name="" id="" cols="30" rows="3">{{item.orderDetailList.map(x=>{ return x.productName}).join(',')}}</textarea> </td>
                   <td>{{item.buyerName}}</td>
                   <td>{{item.buyerPhone}}</td>

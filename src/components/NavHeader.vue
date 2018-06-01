@@ -214,6 +214,7 @@
               alert("注册成功");
             } else {
               this.errorTip = true;
+              alert(res.msg);
             }
           });
       },

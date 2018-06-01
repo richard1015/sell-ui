@@ -277,10 +277,18 @@ export default {
         .then(result => {
           let res = result.data;
           if (res.code == "0") {
-            this.addressList = res.data;
-            this.addressList.forEach(item => {
-                this.selectedAddressId = item.id;
+            let defaultItem = {},
+              defaultIndex = 0;
+            res.data.forEach((item, i) => {
+              if (item.isDefault) {
+                defaultItem = item;
+                defaultIndex = i;
+              }
             });
+            res.data.splice(defaultIndex,1);
+            res.data.unshift(defaultItem);
+            this.addressList=res.data;
+            this.selectedAddressId = defaultItem.id;
           } else {
             this.addressList = [];
           }
