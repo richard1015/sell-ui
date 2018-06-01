@@ -285,10 +285,12 @@ export default {
                 defaultIndex = i;
               }
             });
-            res.data.splice(defaultIndex,1);
-            res.data.unshift(defaultItem);
-            this.addressList=res.data;
-            this.selectedAddressId = defaultItem.id;
+            if (res.data.length > 0) {
+              res.data.splice(defaultIndex, 1);
+              res.data.unshift(defaultItem);
+              this.addressList = res.data;
+              this.selectedAddressId = defaultItem.id;
+            }
           } else {
             this.addressList = [];
           }
