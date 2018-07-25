@@ -1,5 +1,8 @@
 # sell-ui
 vue pc 商城平台
+
+后台api 项目为 git中 sell-server 项目
+https://github.com/richard1015/sell-server
 主要功能
 
 1.登录注册
